@@ -13,36 +13,36 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {      //MainActivity is declared as extending AppCompatActivity
 
     private val TAG = MainActivity::class.java.simpleName
 
-    private var score = 0
+    private var score = 0       //var to keep track of score
 
     private lateinit var gameScoreTextView: TextView
     private lateinit var timeLeftTextView: TextView
     private lateinit var tapMeButton: Button
 
-    private var gameStarted = false
+    private var gameStarted = false //controls if game has started or not
 
-    private lateinit var countDownTimer: CountDownTimer
-    private var initialCountdown: Long = 60000
-    private var countDownInterval: Long = 1000
-    private var timeLeft = 60
+    private lateinit var countDownTimer: CountDownTimer //counts down to 0
+    private var initialCountdown: Long = 60000 //time to count down from
+    private var countDownInterval: Long = 1000 //controls the rate that the countdown timer runs
+    private var timeLeft = 60 // holds how many second are left in the countdown
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {    //Entry point for the activity
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main)      //takes layout and puts it on screen
 
         Log.d(TAG, "onCreate called. Score is: $score")
 
-        gameScoreTextView = findViewById(R.id.game_score_text_view)
+        gameScoreTextView = findViewById(R.id.game_score_text_view)     //searches through activity_main to find view
         timeLeftTextView = findViewById(R.id.time_left_text_view)
         tapMeButton = findViewById(R.id.tap_me_button)
 
-        tapMeButton.setOnClickListener { view ->
-            val bounceAnimation = AnimationUtils.loadAnimation(this,
+        tapMeButton.setOnClickListener { view ->        //attaches tap listener that calls increment score when tapped
+            val bounceAnimation = AnimationUtils.loadAnimation(this,        //calls bounce.xml to control button animation when pressed
                 R.anim.bounce)
             view.startAnimation(bounceAnimation)
             incrementScore()
@@ -82,12 +82,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.about_item) {
-            showInfo()
+            showInfo()      //calls showinfo if about menu pressed
         }
         return true
     }
 
-    private fun showInfo() {
+    private fun showInfo() {        //menu info from menu.xml
         val dialogTitle = getString(R.string.about_title,
         BuildConfig.VERSION_NAME)
         val dialogMessage = getString(R.string.about_message)
@@ -98,37 +98,37 @@ class MainActivity : AppCompatActivity() {
         builder.create().show()
     }
 
-    private fun incrementScore() {
+    private fun incrementScore() {      //Increment score logic, updates score when tap me button is pressed
         if (!gameStarted) {
             startGame()
         }
         score++
 
-        val newScore = getString(R.string.your_score, score)
+        val newScore = getString(R.string.your_score, score)        //retrieves your_score from string.xml and appends the score to text
         gameScoreTextView.text = newScore
 
     }
 
-    private fun resetGame() {
+    private fun resetGame() {       //reset game logic
 
-        score = 0
+        score = 0   //base score at start of game
 
-        val initialScore = getString(R.string.your_score, score)
-        gameScoreTextView.text = initialScore
+        val initialScore = getString(R.string.your_score, score)        //stores score as string and inserts into strings.xml
+        gameScoreTextView.text = initialScore       //updates text to show score
 
-        val initialTimeLeft = getString(R.string.time_left, 60)
+        val initialTimeLeft = getString(R.string.time_left, 60)     //same as above with time left
         timeLeftTextView.text = initialTimeLeft
 
-        countDownTimer = object : CountDownTimer(initialCountdown, countDownInterval) {
+        countDownTimer = object : CountDownTimer(initialCountdown, countDownInterval) { //sets up 60000 milsecs counted in 1000 milsec cycles
 
-            override fun onTick(millisUntilFinished: Long) {
+            override fun onTick(millisUntilFinished: Long) {        //called every time interval
                 timeLeft = millisUntilFinished.toInt() / 1000
 
-                val timeLeftString = getString(R.string.time_left, timeLeft)
+                val timeLeftString = getString(R.string.time_left, timeLeft)        //updates time left display
                 timeLeftTextView.text = timeLeftString
             }
 
-            override fun onFinish() {
+            override fun onFinish() {      // calls endgame function
                 endGame()
             }
         }
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
         gameStarted = false
     }
 
-    private fun restoreGame() {
+    private fun restoreGame() {     //if screen orientation changes, uses saved values to start game where left off
 
         val restoredScore = getString(R.string.your_score, score)
         gameScoreTextView.text = restoredScore
@@ -163,18 +163,18 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun startGame() {
+    private fun startGame() {       //start game logic
 
-        countDownTimer.start()
-        gameStarted = true
+        countDownTimer.start()      //starts counter/game
+        gameStarted = true          //game is started
 
 
     }
 
-    private fun endGame() {
+    private fun endGame() {     //end game logic
 
-        Toast.makeText(this, getString(R.string.game_over_message, score), Toast.LENGTH_LONG).show()
-        resetGame()
+        Toast.makeText(this, getString(R.string.game_over_message, score), Toast.LENGTH_LONG).show()    //display of final score
+        resetGame() //calls reset game
 
     }
 
