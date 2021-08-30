@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {      //MainActivity is declared as ex
 
     private var score = 0       //var to keep track of score
 
-    private lateinit var gameScoreTextView: TextView
+    private lateinit var gameScoreTextView: TextView    //text & button vars
     private lateinit var timeLeftTextView: TextView
     private lateinit var tapMeButton: Button
 
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {      //MainActivity is declared as ex
             incrementScore()
         }
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState != null) {       //loads saved time/score if exists/ resets game
             score = savedInstanceState.getInt(SCORE_KEY)
             timeLeft = savedInstanceState.getInt(TIME_LEFT_KEY)
             restoreGame()
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {      //MainActivity is declared as ex
 
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+    override fun onSaveInstanceState(outState: Bundle) {    //saves values if config changes
         super.onSaveInstanceState(outState)
 
         outState.putInt(SCORE_KEY, score)
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {      //MainActivity is declared as ex
         Log.d(TAG, "onSaveInstanceState: Saving Score: $score & timeLeft: $timeLeft")
     }
 
-    override fun onDestroy() {
+    override fun onDestroy() {      //clears saved data when exited
         super.onDestroy()
 
         Log.d(TAG, "onDestroy called.")
